@@ -2,7 +2,6 @@ package example.org.githubjobs;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +32,7 @@ public class JobViewAdapter extends RecyclerView.Adapter<JobViewAdapter.JobViewH
     public void onBindViewHolder(JobViewHolder holder, int position) {
         Job job = mJobList.get(position);
 
-        Picasso.with(mContext).load(job.getLogoURL()).placeholder(R.drawable.placeholder).error(R.drawable.nologo).into(holder.jobLogo);
+        Picasso.with(mContext).load(job.getLogoURL()).placeholder(R.drawable.placeholder).error(R.drawable.nologo).fit().centerInside().into(holder.jobLogo);
         holder.companyName.setText(job.getCompanyName());
         holder.jobTitle.setText(job.getJobTitle());
 
@@ -41,20 +40,13 @@ public class JobViewAdapter extends RecyclerView.Adapter<JobViewAdapter.JobViewH
 
     @Override
     public int getItemCount() {
-        Log.d(TAG, "item count: " + mJobList);
+//        Log.d(TAG, "items: " + mJobList);
         return null!=mJobList ? mJobList.size() : 0;
     }
 
     @Override
     public JobViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View jobView = LayoutInflater.from(mContext).inflate(R.layout.job_browse_view, parent, false);
-//        jobView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                int jobPosition = parent.indexOfChild(v);
-////                Log.d(TAG, "position: " + jobPosition);
-//            }
-//        });
         return new JobViewHolder(jobView);
     }
 

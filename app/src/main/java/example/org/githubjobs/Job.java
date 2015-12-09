@@ -5,6 +5,11 @@ package example.org.githubjobs;
  */
 public class Job {
 
+    public static final String COMPANY_NAME = "company_name";
+    public static final String JOB_TITLE = "job_title";
+    public static final String JOB_DESCRIPTION = "job_description";
+    public static final String LOGO_URL = "logo_url";
+
     public String companyName;
     public String logoURL;
     public String jobTitle;

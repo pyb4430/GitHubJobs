@@ -28,14 +28,17 @@ public class getGitHubData {
     static final String DESCRIPTION_PARAMETER = "description";
     static final String LAT_PARAMETER = "lat";
     static final String LONG_PARAMETER = "lon";
+    static final String LOCATION_PARAMETER = "location";
+    public static final String DEFAULT_LOCATION = "San Francisco, CA";
+    static final double NO_GPS_DATA = 400;
     private String searchTerm;
-    private long locationLong;
-    private long locationLat;
+    private double locationLong;
+    private double locationLat;
     private Uri mUri;
 
     private List<Job> mJobs;
 
-    public getGitHubData(String searchTerm, long locationLat, long locationLong) {
+    public getGitHubData(String searchTerm, double locationLat, double locationLong) {
         this.searchTerm = searchTerm;
         this.locationLat = locationLat;
         this.locationLong = locationLong;
@@ -43,12 +46,21 @@ public class getGitHubData {
     }
 
     public void createUri() {
-        mUri = Uri.parse(GITHUB_API_URL)
-                .buildUpon()
-                .appendQueryParameter(DESCRIPTION_PARAMETER, null == searchTerm ? "PHP" : searchTerm)
-                .appendQueryParameter(LAT_PARAMETER, String.valueOf(locationLat))
-                .appendQueryParameter(LONG_PARAMETER, String.valueOf(locationLong))
-                .build();
+        Log.d(TAG, "Lat and Long: " + locationLat + " " + locationLong);
+        if(locationLat != NO_GPS_DATA && locationLong != NO_GPS_DATA) {
+            mUri = Uri.parse(GITHUB_API_URL)
+                    .buildUpon()
+                    .appendQueryParameter(DESCRIPTION_PARAMETER, null == searchTerm ? "PHP" : searchTerm)
+                    .appendQueryParameter(LAT_PARAMETER, String.valueOf(locationLat))
+                    .appendQueryParameter(LONG_PARAMETER, String.valueOf(locationLong))
+                    .build();
+        } else {
+            mUri = Uri.parse(GITHUB_API_URL)
+                    .buildUpon()
+                    .appendQueryParameter(DESCRIPTION_PARAMETER, null == searchTerm ? "PHP" : searchTerm)
+                    .appendQueryParameter(LOCATION_PARAMETER, DEFAULT_LOCATION)
+                    .build();
+        }
         Log.d(TAG, mUri.toString());
     }
 
@@ -73,7 +85,7 @@ public class getGitHubData {
                 mJobs.add(new Job(jobCompany, jobLogoUrl, jobTitle, jobDescription));
             }
 
-            Log.d(TAG, "Job Array:\n" + mJobs.get(0).getLogoURL());
+//            Log.d(TAG, "Job Array:\n" + mJobs.get(0).getLogoURL());
 
         } catch (JSONException e) {
             Log.e(TAG, "JSON error: " + e.getMessage());
