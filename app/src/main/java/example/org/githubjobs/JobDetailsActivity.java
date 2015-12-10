@@ -51,6 +51,7 @@ public class JobDetailsActivity extends AppCompatActivity {
         companyNameView.setText(companyName);
         companyUrlView.setText(companyUrl);
 
+        // If the company URL is clicked take the user to the company website in the web browser
         companyUrlView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
