@@ -76,6 +76,8 @@ public class GetGitHubData {
         final String LOGO_URL_OBJECT = "company_logo";
         final String COMPANY_OBJECT = "company";
         final String DESCRIPTION_OBJECT = "description";
+        final String COMPANY_URL_OBJECT = "company_url";
+
 
         // Create a new ArrayList of Jobs to hold the jobs from the JSON
         mJobs = new ArrayList<Job>();
@@ -90,8 +92,9 @@ public class GetGitHubData {
                 String jobCompany = jobObject.getString(COMPANY_OBJECT);
                 String jobDescription = jobObject.getString(DESCRIPTION_OBJECT);
                 String jobLogoUrl = jobObject.getString(LOGO_URL_OBJECT);
+                String jobWebsiteUrl = jobObject.getString(COMPANY_URL_OBJECT);
 
-                mJobs.add(new Job(jobCompany, jobLogoUrl, jobTitle, jobDescription));
+                mJobs.add(new Job(jobCompany, jobLogoUrl, jobTitle, jobDescription, jobWebsiteUrl));
             }
 
 //            Log.d(TAG, "Job Array:\n" + mJobs.get(0).getLogoURL());

@@ -42,7 +42,18 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/detailCompanyUrlView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="2dp"
                 android:paddingBottom="16dp"
+                android:textColor="@color/colorPrimaryDark"
                 android:textSize="20sp"/>
 
             <TextView

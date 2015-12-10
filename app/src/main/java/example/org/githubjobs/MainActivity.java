@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 jobDetailsIntent.putExtra(Job.JOB_TITLE, selectedJob.getJobTitle());
                 jobDetailsIntent.putExtra(Job.COMPANY_NAME, selectedJob.getCompanyName());
                 jobDetailsIntent.putExtra(Job.JOB_DESCRIPTION, selectedJob.getJobDescription());
+                jobDetailsIntent.putExtra(Job.JOB_COMPANY_URL, selectedJob.getJobCompanyUrl());
                 startActivity(jobDetailsIntent);
             }
         }));
@@ -157,16 +158,17 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         mSearchView.setSearchableInfo(searchManager.getSearchableInfo(MainActivity.this.getComponentName()));
         mSearchView.setIconified(false);
         mSearchView.setQuery(searchTerm, false);
+        mSearchView.clearFocus();
 
         // Listen for submission of the search view text and load jobs from GitHub Jobs website
         // that satisfy the query. Save the query in the shared preferences
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                mSearchView.clearFocus();
                 searchTerm = query;
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 sharedPref.edit().putString(SEARCH_TERM, query).commit();
-                mSearchView.clearFocus();
 //                mGetGitHubData = new LoadJobs(searchTerm, locationLat, locationLong);
 //                mGetGitHubData.execute();
                 return false;
