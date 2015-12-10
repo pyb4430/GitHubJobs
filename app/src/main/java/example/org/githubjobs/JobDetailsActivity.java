@@ -24,19 +24,21 @@ public class JobDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_job_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Set the views to hold the job information
         jobTitleView = (TextView) findViewById(R.id.detailJobTitle);
         jobDescriptionView = (TextView) findViewById(R.id.detailJobDescription);
         companyNameView = (TextView) findViewById(R.id.detailCompanyView);
 
+        // Retrieve the job information from the extras passed with the intent that started this
+        // activity.
         Intent intent = getIntent();
-
         jobTitle = intent.getStringExtra(Job.JOB_TITLE);
         jobDescription = intent.getStringExtra(Job.JOB_DESCRIPTION);
         companyName = intent.getStringExtra(Job.COMPANY_NAME);
 
+        // Set the job information in the views
         jobTitleView.setText(jobTitle);
         jobDescriptionView.setText(Html.fromHtml(jobDescription));
         companyNameView.setText(companyName);

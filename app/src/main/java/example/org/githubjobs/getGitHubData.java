@@ -20,10 +20,13 @@ import java.util.List;
 
 /**
  * Created by Taylor on 12/7/2015.
+ * Constructs a URI using location data and a search query according to the GitHub Jobs api.
+ * Uses this URI to downloads a raw JSON String asynchronously from GitHub Jobs, parses the JSON,
+ * and obtains a List of Job objects.
  */
-public class getGitHubData {
+public class GetGitHubData {
 
-    static final String TAG = getGitHubData.class.getSimpleName();
+    static final String TAG = GetGitHubData.class.getSimpleName();
     static final String GITHUB_API_URL = "https://jobs.github.com/positions.json";
     static final String DESCRIPTION_PARAMETER = "description";
     static final String LAT_PARAMETER = "lat";
@@ -38,7 +41,7 @@ public class getGitHubData {
 
     private List<Job> mJobs;
 
-    public getGitHubData(String searchTerm, double locationLat, double locationLong) {
+    public GetGitHubData(String searchTerm, double locationLat, double locationLong) {
         this.searchTerm = searchTerm;
         this.locationLat = locationLat;
         this.locationLong = locationLong;
@@ -47,6 +50,9 @@ public class getGitHubData {
 
     public void createUri() {
         Log.d(TAG, "Lat and Long: " + locationLat + " " + locationLong);
+
+        // Build the URI that will be requested from GitHub Jobs. If there is GPS data, use it,
+        // if there is no GPS data, default to a search location of San Francisco, CA
         if(locationLat != NO_GPS_DATA && locationLong != NO_GPS_DATA) {
             mUri = Uri.parse(GITHUB_API_URL)
                     .buildUpon()
@@ -71,8 +77,11 @@ public class getGitHubData {
         final String COMPANY_OBJECT = "company";
         final String DESCRIPTION_OBJECT = "description";
 
+        // Create a new ArrayList of Jobs to hold the jobs from the JSON
         mJobs = new ArrayList<Job>();
 
+        // Parse the raw string of JSON to extract the desired job information to be displayed to
+        // the user.
         try {
             JSONArray rawJSONArray = new JSONArray(rawJSON);
             for(int i = 0; i<rawJSONArray.length(); i++) {
@@ -94,6 +103,8 @@ public class getGitHubData {
     }
 
     public void execute() {
+        // Create a DownloadGitHubData variable and execute it to download a string of data from
+        // GitHub Jobs asynchronously
         DownloadGitHubData downloadGitHubData = new DownloadGitHubData();
         downloadGitHubData.execute(mUri);
     }
@@ -103,17 +114,19 @@ public class getGitHubData {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            parseJSON(s);
+
+            // Parse raw JSON string obtained from the download
+            parseJSON(s + "");
         }
 
         @Override
         protected String doInBackground(Uri... params) {
 
+            // Asynchronously retrieve raw JSON string from GitHub Jobs
             HttpURLConnection gitHubHttpConnection = null;
             BufferedReader streamReader = null;
-
             try {
-                URL mUrl = new URL(mUri.toString());//params[0].toString());
+                URL mUrl = new URL(mUri.toString());
 
                 Log.d(TAG, mUrl.toString());
 
@@ -137,7 +150,7 @@ public class getGitHubData {
                     buffer.append(line + "\n");
                 }
 
-                Log.d(TAG, "Data read:\n" + buffer.toString());
+//                Log.d(TAG, "Data read:\n" + buffer.toString());
 
                 return buffer.toString();
             } catch (MalformedURLException e) {

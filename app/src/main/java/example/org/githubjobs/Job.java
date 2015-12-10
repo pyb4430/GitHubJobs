@@ -2,6 +2,8 @@ package example.org.githubjobs;
 
 /**
  * Created by Taylor on 12/7/2015.
+ * A class to hold job information. Holds company name, job title, job description, and the company
+ * logo url.
  */
 public class Job {
 
