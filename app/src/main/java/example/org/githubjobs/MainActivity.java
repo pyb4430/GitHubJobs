@@ -123,11 +123,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         // If the application has GPS permissions and location has not been set, the application will
         // wait for a GPS fix before loading jobs. A toast notifies the user that the application is
-        // awaiting a GPS fix.
-        if(isGPSPermission && locationLat == GetGitHubData.NO_GPS_DATA) {
-            Toast.makeText(this,"Getting GPS Fix",Toast.LENGTH_LONG).show();
-            return;
-        }
+        // awaiting a GPS fix. Commented out to eliminate the long period of blank screen that occurs
+        // if the phone takes a while to get a GPS lock.
+//        if(isGPSPermission && locationLat == GetGitHubData.NO_GPS_DATA) {
+//            Toast.makeText(this,"Getting GPS Fix",Toast.LENGTH_LONG).show();
+//            return;
+//        }
 
         // Retrieve job data from GitHub Jobs website to display to user
         mGetGitHubData = new LoadJobs(searchTerm, locationLat, locationLong);
@@ -169,8 +170,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 searchTerm = query;
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 sharedPref.edit().putString(SEARCH_TERM, query).commit();
-//                mGetGitHubData = new LoadJobs(searchTerm, locationLat, locationLong);
-//                mGetGitHubData.execute();
                 return false;
             }
 
