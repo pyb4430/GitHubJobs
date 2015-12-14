@@ -10,10 +10,6 @@ import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,7 +42,6 @@ public class GetGitHubData {
     private double locationLat;
     private Uri mUri;
     private Gson mGson;
-
     private List<Job> mJobs;
 
     public GetGitHubData(String searchTerm, double locationLat, double locationLong) {
@@ -77,41 +72,6 @@ public class GetGitHubData {
                     .build();
         }
         Log.d(TAG, mUri.toString());
-    }
-
-    public void parseJSON(String rawJSON) {
-
-        final String JOB_TITLE_OBJECT = "title";
-        final String LOGO_URL_OBJECT = "company_logo";
-        final String COMPANY_OBJECT = "company";
-        final String DESCRIPTION_OBJECT = "description";
-        final String COMPANY_URL_OBJECT = "company_url";
-
-
-        // Create a new ArrayList of Jobs to hold the jobs from the JSON
-        mJobs = new ArrayList<Job>();
-
-        // Parse the raw string of JSON to extract the desired job information to be displayed to
-        // the user.
-        try {
-            JSONArray rawJSONArray = new JSONArray(rawJSON);
-            for(int i = 0; i<rawJSONArray.length(); i++) {
-                JSONObject jobObject = rawJSONArray.getJSONObject(i);
-                String jobTitle = jobObject.getString(JOB_TITLE_OBJECT);
-                String jobCompany = jobObject.getString(COMPANY_OBJECT);
-                String jobDescription = jobObject.getString(DESCRIPTION_OBJECT);
-                String jobLogoUrl = jobObject.getString(LOGO_URL_OBJECT);
-                String jobWebsiteUrl = jobObject.getString(COMPANY_URL_OBJECT);
-
-                mJobs.add(new Job(jobCompany, jobLogoUrl, jobTitle, jobDescription, jobWebsiteUrl));
-            }
-
-//            Log.d(TAG, "Job Array:\n" + mJobs.get(0).getLogoURL());
-
-        } catch (JSONException e) {
-            Log.e(TAG, "JSON error: " + e.getMessage());
-        }
-
     }
 
     public void execute() {
