@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,7 @@ public class JobViewAdapter extends RecyclerView.Adapter<JobViewAdapter.JobViewH
         // Draw the company logo in the JobViewHolder ImageView such that it fits in the view while
         // preserving aspect ratio. Set the company name and job title in the JobViewHolder
         String logoUrl = job.getLogoURL();
-        if(logoUrl != null && logoUrl.length() > 0) {
+        if(logoUrl != null && Patterns.WEB_URL.matcher(logoUrl).matches()) {
             Picasso.with(mContext).load(job.getLogoURL()).placeholder(R.drawable.placeholder).error(R.drawable.nologo).fit().centerInside().into(holder.jobLogo);
         } else {
             Picasso.with(mContext).load(R.drawable.nologo).fit().centerInside().into(holder.jobLogo);
