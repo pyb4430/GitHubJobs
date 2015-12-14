@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.TextView;
 
@@ -46,23 +47,41 @@ public class JobDetailsActivity extends AppCompatActivity {
         companyUrl = intent.getStringExtra(Job.JOB_COMPANY_URL);
 
         // Set the job information in the views
-        jobTitleView.setText(jobTitle);
-        jobDescriptionView.setText(Html.fromHtml(jobDescription));
-        companyNameView.setText(companyName);
-        companyUrlView.setText(companyUrl);
+        if(jobTitle != null && jobTitle.length()>0) {
+            jobTitleView.setText(jobTitle);
+        } else {
+            jobTitleView.setText("No Job Title");
+        }
 
-        // If the company URL is clicked take the user to the company website in the web browser
-        companyUrlView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(companyUrl.length() > 0) {
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(companyUrl));
-                    startActivity(i);
+        if(jobDescription!=null && jobDescription.length()>0) {
+            jobDescriptionView.setText(Html.fromHtml(jobDescription));
+        } else {
+            jobDescriptionView.setText("No Job Description");
+        }
+
+        if(companyName != null && companyName.length() > 0) {
+            companyNameView.setText(companyName);
+        } else {
+            companyNameView.setText("No Company Name");
+        }
+
+        if(companyUrl != null && Patterns.WEB_URL.matcher(companyUrl).matches()) {
+            companyUrlView.setText(companyUrl);
+            // If the company URL is clicked take the user to the company website in the web browser
+            companyUrlView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (companyUrl.length() > 0) {
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(companyUrl));
+                        startActivity(i);
+                    }
+
                 }
-
-            }
-        });
+            });
+        } else {
+            companyUrlView.setText("No Company Website");
+        }
 
     }
 

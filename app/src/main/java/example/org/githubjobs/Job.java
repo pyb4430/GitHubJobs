@@ -13,53 +13,54 @@ public class Job {
     public static final String LOGO_URL = "logo_url";
     public static final String JOB_COMPANY_URL = "company_url";
 
-    public String companyName;
-    public String logoURL;
-    public String jobTitle;
-    public String jobDescription;
-    public String jobCompanyUrl;
+    public String company;
+    public String company_logo;
+    public String title;
+    public String description;
+    public String company_url;
 
     public Job(String companyName, String logoURL, String jobTitle, String jobDescription, String jobCompanyUrl) {
-        this.companyName = companyName;
-        this.logoURL = logoURL;
-        this.jobTitle = jobTitle;
-        this.jobDescription = jobDescription;
-        this.jobCompanyUrl = jobCompanyUrl;
+
+        this.company = companyName;
+        this.company_logo = logoURL;
+        this.title = jobTitle;
+        this.description = jobDescription;
+        this.company_url = jobCompanyUrl;
     }
 
     public String getJobCompanyUrl() {
-        return jobCompanyUrl;
+        return company_url;
     }
 
     public String getCompanyName() {
-        return companyName;
+        return company;
     }
 
     public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+        this.company = companyName;
     }
 
     public String getLogoURL() {
-        return logoURL;
+        return company_logo;
     }
 
     public void setLogoURL(String logoURL) {
-        this.logoURL = logoURL;
+        this.company_logo = logoURL;
     }
 
     public String getJobTitle() {
-        return jobTitle;
+        return title;
     }
 
     public void setJobTitle(String jobTitle) {
-        this.jobTitle = jobTitle;
+        this.title = jobTitle;
     }
 
     public String getJobDescription() {
-        return jobDescription;
+        return description;
     }
 
     public void setJobDescription(String jobDescription) {
-        this.jobDescription = jobDescription;
+        this.description = jobDescription;
     }
 }

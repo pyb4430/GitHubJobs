@@ -94,21 +94,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         mJobRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mJobRecyclerView.setAdapter(mJobViewAdapter);
         mJobRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(this));
-
-        // Add OnItemTouchListener to RecyclerView to allow user to select jobs and see their details.
-        mJobRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Job selectedJob = mJobList.get(position);
-                Log.d(TAG, "item selected: " + position);
-                Intent jobDetailsIntent = new Intent(MainActivity.this, JobDetailsActivity.class);
-                jobDetailsIntent.putExtra(Job.JOB_TITLE, selectedJob.getJobTitle());
-                jobDetailsIntent.putExtra(Job.COMPANY_NAME, selectedJob.getCompanyName());
-                jobDetailsIntent.putExtra(Job.JOB_DESCRIPTION, selectedJob.getJobDescription());
-                jobDetailsIntent.putExtra(Job.JOB_COMPANY_URL, selectedJob.getJobCompanyUrl());
-                startActivity(jobDetailsIntent);
-            }
-        }));
     }
 
     @Override

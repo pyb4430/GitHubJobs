@@ -4,6 +4,12 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -38,6 +45,7 @@ public class GetGitHubData {
     private double locationLong;
     private double locationLat;
     private Uri mUri;
+    private Gson mGson;
 
     private List<Job> mJobs;
 
@@ -46,6 +54,7 @@ public class GetGitHubData {
         this.locationLat = locationLat;
         this.locationLong = locationLong;
         createUri();
+        mGson = new Gson();
     }
 
     public void createUri() {
@@ -119,7 +128,7 @@ public class GetGitHubData {
             super.onPostExecute(s);
 
             // Parse raw JSON string obtained from the download
-            parseJSON(s + "");
+            //parseJSON(s + "");
         }
 
         @Override
@@ -128,6 +137,9 @@ public class GetGitHubData {
             // Asynchronously retrieve raw JSON string from GitHub Jobs
             HttpURLConnection gitHubHttpConnection = null;
             BufferedReader streamReader = null;
+
+            JsonReader jsonReader = null;
+            JsonParser streamParser = null;
             try {
                 URL mUrl = new URL(mUri.toString());
 
@@ -140,22 +152,38 @@ public class GetGitHubData {
                 if(inputStream == null) {
                     return null;
                 }
-                streamReader = new BufferedReader(new InputStreamReader(inputStream));
 
-                if(streamReader==null) {
-                    return null;
-                }
+//                streamReader = new BufferedReader(new InputStreamReader(inputStream));
+//                if(streamReader==null) {
+//                    return null;
+//                }
 
-                StringBuffer buffer = new StringBuffer();
-
-                String line;
-                while((line = streamReader.readLine()) != null) {
-                    buffer.append(line + "\n");
-                }
-
-//                Log.d(TAG, "Data read:\n" + buffer.toString());
-
-                return buffer.toString();
+                jsonReader = new JsonReader(new InputStreamReader(inputStream));
+                streamParser = new JsonParser();
+                JsonElement jsonElement = streamParser.parse(jsonReader);
+                Type listType = new TypeToken<ArrayList<Job>>() {}.getType();
+                mJobs = mGson.fromJson(jsonElement, listType);
+//                JsonArray jsonArray = jsonElement.getAsJsonArray();
+//
+//                for( JsonElement jobElement : jsonArray) {
+//                    JsonObject newJob = jobElement.getAsJsonObject();
+//                    Job mJob = mGson.fromJson(jobElement, Job.class);
+//                    Log.d(TAG, mJob.getJobTitle() + ""); //newJob.get("company").toString());
+//                }
+//
+//
+//
+//
+//                StringBuffer buffer = new StringBuffer();
+//
+//                String line;
+//                while((line = streamReader.readLine()) != null) {
+//                    buffer.append(line + "\n");
+//                }
+//
+////                Log.d(TAG, "Data read:\n" + buffer.toString());
+//
+//                return buffer.toString();
             } catch (MalformedURLException e) {
                 Log.e(TAG, "Malformed URL: " + e.getMessage());
                 return null;
@@ -168,7 +196,7 @@ public class GetGitHubData {
 
                 if(streamReader != null) {
                     try {
-                        streamReader.close();
+                        jsonReader.close();
                     } catch( IOException e) {
                         Log.e(TAG, "Reader not closed: " + e.getMessage());
                     }
