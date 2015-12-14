@@ -10,7 +10,6 @@ import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -84,20 +83,10 @@ public class GetGitHubData {
     public class DownloadGitHubData extends AsyncTask<Uri, Void, String> {
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            // Parse raw JSON string obtained from the download
-            //parseJSON(s + "");
-        }
-
-        @Override
         protected String doInBackground(Uri... params) {
 
-            // Asynchronously retrieve raw JSON string from GitHub Jobs
+            // Asynchronously retrieve and parse JSON from GitHub Jobs
             HttpURLConnection gitHubHttpConnection = null;
-            BufferedReader streamReader = null;
-
             JsonReader jsonReader = null;
             JsonParser streamParser = null;
             try {
@@ -113,37 +102,11 @@ public class GetGitHubData {
                     return null;
                 }
 
-//                streamReader = new BufferedReader(new InputStreamReader(inputStream));
-//                if(streamReader==null) {
-//                    return null;
-//                }
-
                 jsonReader = new JsonReader(new InputStreamReader(inputStream));
                 streamParser = new JsonParser();
                 JsonElement jsonElement = streamParser.parse(jsonReader);
                 Type listType = new TypeToken<ArrayList<Job>>() {}.getType();
                 mJobs = mGson.fromJson(jsonElement, listType);
-//                JsonArray jsonArray = jsonElement.getAsJsonArray();
-//
-//                for( JsonElement jobElement : jsonArray) {
-//                    JsonObject newJob = jobElement.getAsJsonObject();
-//                    Job mJob = mGson.fromJson(jobElement, Job.class);
-//                    Log.d(TAG, mJob.getJobTitle() + ""); //newJob.get("company").toString());
-//                }
-//
-//
-//
-//
-//                StringBuffer buffer = new StringBuffer();
-//
-//                String line;
-//                while((line = streamReader.readLine()) != null) {
-//                    buffer.append(line + "\n");
-//                }
-//
-////                Log.d(TAG, "Data read:\n" + buffer.toString());
-//
-//                return buffer.toString();
             } catch (MalformedURLException e) {
                 Log.e(TAG, "Malformed URL: " + e.getMessage());
                 return null;
@@ -154,7 +117,7 @@ public class GetGitHubData {
                     gitHubHttpConnection.disconnect();;
                 }
 
-                if(streamReader != null) {
+                if(jsonReader != null) {
                     try {
                         jsonReader.close();
                     } catch( IOException e) {
